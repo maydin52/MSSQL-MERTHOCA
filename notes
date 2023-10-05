@@ -1,0 +1,22 @@
+
+Dikkat!!! select into kısıtları getirmiyor.
+
+Yedeğin tutulması ve saklanması konusu. yangın, sel, 
+Hiçbir verinin silinmemesi gerekiyor. Delil vs.
+delete kapatılması, yetkilendirme
+
+ldf dosyası son komuta kadar çalışırsa yedeği kurtarabiliriz.
+
+SQL Injection 
+
+SQL Server açıkları
+Parametre gönderirken string consunation yapmayı önlemek
+
+Identity ve PK aynı değil. Birbirlerinin dışında da kullanılabilir.
+
+OOP veritabanları geldiğinde iş %30 azalacak.
+Data != Object
+
+bant genişliği
+yer kaplaması
+kaynak israfı
