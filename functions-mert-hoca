@@ -1,0 +1,189 @@
+
+-- DATE FUNCTIONS
+
+select GETDATE() -- bugünün sistem saatine göre deðeri
+
+select DATENAME(MONTH,GETDATE()) -- bugün hangi aydayýz (ayýn ismi)
+select DATENAME(WEEKDAY,GETDATE()) -- saturday
+select DATENAME(DAY,GETDATE()) -- 11. gün
+select CONCAT(DATENAME(YEAR,GETDATE()),' yýlýnýn ',DATENAME(MONTH,GETDATE()), ' ayýnýn ', DATENAME(DAY,GETDATE()) ,' günü ', DATENAME(WEEKDAY,GETDATE()), ' Saat : ', DATENAME(HOUR,GETDATE()), ' sularý')
+
+-- sql de ay ismini nasýl türkçe getiririz
+-- sql date localization ayarlarý 
+
+-- sayýsal bir ifade olarak bir tarih saat formatýnda bir interval deðerini almamýzý saðlar (ay deðeri interval olarak verdik)
+select DATEPART(MONTH,CONVERT(date,'2015-10-13'))
+
+-- 1 yýl sonra bugün hangi gün pazar gün
+select DATENAME(WEEKDAY,DATEADD(YEAR,1,GETDATE()))
+
+select DATEADD(MONTH,-1,GETDATE())
+
+-- yaþ algoritmasý
+select DATEDIFF(YEAR,CONVERT(date,'10-10-1990'), GETDATE())
+
+use MovieDB
+-- datediff iki tarih arasýndaki farký bulur
+-- filmin gösterime girmesine kaç gün kaldý
+select DATEDIFF(DAY, GETDATE(),CONVERT(date,RelaseDate)) as 'Kaç Gün Kaldý' from MoviePlanings 
+
+--  kaç gündür hayattayýz
+select DATEDIFF(DAY,CONVERT(date,'1999-09-16'),GETDATE())
+
+select CAST('10' as int) -- metinsel bir ifadeyi sayýsal deðere çevirir. yada sayýsal veya tarih formatýndaki bir deðeri metinsel bir ifadeye çevirir.
+select CAST(GETDATE() as nvarchar(MAX)) -- date metinsel bir ifade oldu
+select CONVERT(int,10.5) -- date ve sayýsal deðerleri birbirine dönüþtürebiliriz
+
+select '5' * '10' -- bu iþlem hata verir.
+select CAST('10' as int) * CAST('5' as int)
+
+SET language turkish
+SELECT datename(dw,GETDATE()) as day
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+-- Math Functions
+
+select 5 + 10
+
+select ABS(-17) -- mutlak deðerini aldýk
+
+select POWER(2,3) -- 2 ^ 3 deðerini verir
+
+select SQRT(8) -- karakök
+
+-- RAND () rastgele sayý üretmek için
+-- 0 yazmamýzýn sebebi 1 ile 100 arasýnda tamsayý deðeri üretmesini saðlamak için 0 hassasiyet verdik.
+select ROUND(RAND() * 100,0)
+-- kaç karaktere göre yuvarlama yapacaðýný belirtir (ikinci paramtere olan 3, virgülden sonraki hassasiyet deðeri, yani virgülden sonra 3 karaktere göre yuvarla)
+select ROUND(5.5657657,0)
+-- Round ise yuvarlama için yukarý yada aþaðý yuvarlama yapar
+select CEILING(5.3)
+-- yukarý yuvarla
+select FLOOR(5.2)
+-- aþaðý yuvarla
+
+----------------------------------------------------------------------------------------------------------------------
+
+STRING FUNCTIONS
+
+-- Sql Builtin Functions 
+-- Aggregate Functions (Group By) (SUM,Count,AVG,MAX,MIN)
+-- String Functions (Metinsel ifadeler için kullanýrýz, Büyük Harf,Küçük Harf, Kaç Karakter, Boþluk Alma, Replace ile Karakteri baþka karaktere dönüþtürme, Karakter Indexini bulma)
+-- Datetime Funtions (Date ifadeleri için kullanýrýz, DateName tarih ismi,DatePart, Datediff (tarih farkýný alma))
+-- Math Functions (Karakök,üs alma, mutlak deðer)
+
+-- büyü harf
+select UPPER('ali')
+-- küçük harf
+select LOWER('AlI')
+-- karakter uzunluðu
+select LEN('ayþe')
+-- belirli bir karakter alma (2 kaçýncý karakterden baþlanacak, 5 ise kaç adet alýnacaðý)
+select SUBSTRING('barcelona',2,5)
+-- karakteri replace etme (m karakterini tüm metinsel ifade de k ile deðiþtir)
+
+select REPLACE(REPLACE('mustafa mehmet','m','k'),' ','&')
+
+select * from Movies
+select REPLACE(m.Name,SUBSTRING('matrix',2,2),'filmim') as 'Film Adý' from Movies m
+-- tablonun sütün alanlarýný farklý bir formtta raporlamak için yukarýdaki gibi bir kullaným yapabiliriz.
+
+select CHAR(65) -- ascii kodu yazýlan bir deðerin karakter karþýlýðýný verir.
+select ASCII('a') -- tam tersi karakter karþýlýðýný ascii tablo deðerini üretir.
+
+select TRIM(' sadsadsfsadsadsadsad   ') -- kayýt veri tabanýnda tabloya boluklu girildi sað ve soldan boþluk at
+select REPLACE(TRIM(' Ahmet                         CAN  '), ' ', '')
+
+select LTRIM('  Ahmet')
+select RTRIM('Ahmet  ')
+select LTRIM(RTRIM(' Ahmet  ')) -- TRIM
+
+--select TRIM(' ahmet ','  can ', ' gönül ') aþaðýdaki gibi string ifadeleri concat ile birleþtirebiliriz.
+select CONCAT(TRIM(' Ahmet '),',',TRIM('  Can '),',', TRIM(' Gönül'))
+
+
+
+
+
+
+
+
+-- virgüller ile ayrýlmýþ fonksiyon içersine gönderilen deðerlere parametres diyoruz. 
+-- parametereler sayesinde fonsiyonlar farklý deðerler üretir.
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+USER-DEFINED FUNCTIONS
+
+-- Used Defined Function
+-- yazýlýmýcýnýn programda bir sorgu çalýþtýrýken ihtiyaç duyduðu fonsiyonelli yazmasý, geliþtirme
+
+-- view (sorgularýn yazýldýktan sonra diske kaydolup tablo gibi çaðýrýlmasý)
+
+-- store procedure (insert,update,delete) gibi iþlemlerin kaydedilip paremetre bazlý deðiþen deðerlere göre yapýlmasýný saðlayan bir yöntem
+
+-- trigger (bir kayýt atýldýðýnda, güncellendiðinde yada silindiðinde otomatik olarak arka planda bir iþlem yapan tetikleyici mekanizmalar) var.
+
+
+-- function 2 ayrýlýr, table valued function ve skalar function (skalar function deðer döndürür, sýnýf not ortlamasý hesapla, table valued fauction select sorgularýndaki tablo sonucunu döndürür, bunu paremetrik yapar)
+
+
+-- skalar functions
+-- create function YasHesapla
+create function YasHesapla
+(
+ @dT date-- dýþarýdan function gönderilen parametre deðiþken, parametre sayýsý 1 den fazla olabilir.
+)
+returns int -- sonucu hangi veri tipide döner
+as
+begin -- çalýþacak kod bloðu begin ve end arasýna yazýlýr
+return DATEDIFF(YEAR,@dt, GETDATE()) -- hesaplama iþlemi yaptýðým yer
+end
+
+drop function YasHesapla
+
+
+select dbo.YasHesapla(DATEFROMPARTS(1978,10,25))
+
+use NORTHWND
+
+select 
+dbo.YasHesapla(e.BirthDate) as 'Yaþ', 
+CONCAT(e.FirstName,' ', UPPER(e.LastName)) as 'ad soyad' 
+from Employees e
+
+
+select 
+DATEDIFF(YEAR,e.BirthDate,GETDATE()) as 'Yaþ', 
+CONCAT(e.FirstName,' ', UPPER(e.LastName)) as 'ad soyad' 
+from Employees e
+
+-- sütünlarda bir hesaplama yaparak sonucu göstermek için kullandýk
+
+-- sýnav için function sorgusu 
+-- ürün tablosundaki ürünlere %25 zam yapýp hem zamlý hemde zamsýz fiyatlarýný gösterecek bir sorgu yazalým (zam yapma iþlemini bir scalar function yapalým)
+
+-- rapor sonucu aþaðýdaki gibi olsun
+-- A 100 125
+-- B 50 62,5
+
+select * from Employees
+
+
+-- yani bir kiþinin telefon numarasýndan sorgulanmasýný table valued fuctions olarak yapalým
+
+create function KisiArama(
+@telefon varchar(20)
+)
+returns table --table valued function sadece table döndürür,
+as
+return select * from Employees where HomePhone like CONCAT('%',@telefon,'%')
+
+
+-- Not: table valued functions sadece select ile çaðýrýlýr, tablo gibi çaðýr
+select * from Employees
+select dbo.YasHesapla(k.BirthDate), k.FirstName from KisiArama('(206) 555-3412') as k
