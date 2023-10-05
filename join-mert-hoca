@@ -1,0 +1,69 @@
+select p.ProductName,p.CategoryID from Products p
+
+select * from Products
+select * from Categories
+
+-- kategori olan ürünler (inner join)
+select p.ProductName,c.CategoryName from Products p inner join Categories c
+on p.CategoryID = c.CategoryID
+
+-- kategori ismi, ürün ismi, tedarikçi ismini listeyen rapor.
+
+select c.CategoryName,s.ContactName,p.ProductName from Products p 
+join Categories c on c.CategoryID = p.CategoryID
+join Suppliers s on s.SupplierID = p.SupplierID
+
+-- join bitince yeniden join atýlýyor.
+
+
+select * from Products
+select * from Categories
+select * from Suppliers
+
+
+
+-- hangi müþteri, hangi ürünü, hangi kargo þirketi vasýtasý ile satýn almýþ raporu
+
+-- M.ali, Ü.chai, K.trendyol,
+
+
+select 
+o.OrderID as 'sipariþ Numarasý', 
+c.CustomerID as 'Müþteri',
+p.ProductName as 'Ürün',
+s.CompanyName as 'Kargo Þirketi' 
+from Orders o 
+inner join [Order Details] od on o.OrderID = od.OrderID
+inner join Products p on p.ProductID = od.ProductID
+inner join Customers c on o.CustomerID = c.CustomerID
+inner join Shippers s on s.ShipperID = o.ShipVia
+
+-- left right join
+
+select * from Categories
+select * from Products
+
+
+
+select * from Categories c join Products p
+on c.CategoryID = p.CategoryID
+
+select * from Categories c right join Products p
+on c.CategoryID = p.CategoryID
+
+-- ürünü olmayan kategoirlerinde gelmesi lazým
+select * from Categories c left join Products p
+on c.CategoryID = p.CategoryID
+
+
+select * from Categories c full join Products p
+on c.CategoryID = p.CategoryID
+
+select * from Categories
+
+
+-- insert,update,delete iþlemleri (cmts)
+-- create,alter,drop (cmts)
+-- string,datetime functions (cmts)
+-- having group by with join (cmts)
+-- view,store procudure,functions, transactions (pazar)
