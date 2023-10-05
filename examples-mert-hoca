@@ -1,0 +1,102 @@
+
+use NORTHWND
+
+select * from Categories  -- 8 adet kategori
+select * from Products  -- 77 adet ürün
+select * from Customers -- 91 müþteri
+select * from Employees -- 9 çalýþan
+select * from Suppliers --29 tedarikçi
+select * from Orders -- 830 adet sipariþ
+select * from [Order Details] -- 2155 adet sipariþ detayý
+select * from Shippers -- 3 tane kargo þirketi
+
+-- SORGULAR
+
+-- ürün fiyatý 10 ile 50 arasýnda olan ürünlerin listesi (Ürün Adý,fiyatý,stok deðeri)
+select p.ProductName,p.UnitPrice,p.UnitsInStock from Products p where p.UnitPrice >10 and p.UnitPrice < 50
+
+-- 1 numaralý kategorisi olan ürünler
+select p.ProductName, p.CategoryId from Products p where p.CategoryID = 1
+
+
+-- ürün isminde ch içeren ürünlerin listesi -- contains
+-- LIKE '%aranacak_deger%'
+
+select * from Products p where p.ProductName like '%ch%'
+
+-- ürün fiyatý 50 altýnda stok deðeride 15 üstünde olan ürünler
+select p.UnitPrice,p.UnitsInStock,p.ProductName from Products p where p.UnitPrice <50 and p.UnitsInStock > 15
+
+
+-- discontinued yani devamý olan ürünler listesi
+select p.ProductName,p.Discontinued from Products p where p.Discontinued =1 --'true'
+-- 0 false
+-- 1 true
+
+-- tost seven çalýþanlar
+select * from Employees e where e.Notes like '%toast%'
+
+-- hangi þehirden kaç tane çalýþaným var (city deðerine göre grup)
+-- 3 London
+-- 5 Newyork
+
+select e.City, Count(*) as 'Kaç Kiþi' from Employees e group by e.City 
+
+-- select e.City, e.FirstName from Employees e where City like '%London%'
+
+-- hangi kategoride kaç adet ürün var (products,categories)
+-- ürün adet, kategori 
+-- 10 , 1
+-- 20 , 2
+select Count(*)  as 'ürün adet', p.CategoryID from Products p group by p.CategoryID
+
+select c.CategoryName from Categories c where c.CategoryID = 5
+
+
+-- ürünleri fiyatlarýna göre artandan azalana sýralýyalým (desc)
+
+select * from Products p order by p.UnitPrice desc
+
+-- ürünlerin toplam maliyetlerini ve ürün isimlerini gösteren rapor
+-- Chai, stok x unitprice
+
+select p.ProductName as 'ürün', p.UnitsInStock,p.UnitPrice,(p.UnitPrice * p.UnitsInStock) as 'maliyet' from Products p
+
+
+-- aggregate functions (kümeleme fonkisyonlarý, count,sum,max,min,avg)
+-- kaç adet ürün var
+select COUNT(*) from Products -- kayýt sayýsý
+-- toplam ürün maliyeni ne kadar
+
+select SUM(p.UnitPrice * p.UnitsInStock) from Products p
+-- agregate functions kullanarak skalar deðer yani tek bir sonuç döndürürüz.
+
+-- ortalama ürün maliyeti ne kadar
+
+select (select SUM(p.UnitPrice * p.UnitsInStock) from Products p) / (select COUNT(*) from Products)
+
+-- ortalama ürün maliyeti ne kadar
+select AVG(p.UnitPrice * p.UnitsInStock) from Products p
+
+-- minimum maliyeti olan ürün fiyatý ne kadar
+select MIN(p.UnitPrice * p.UnitsInStock) from Products p
+
+-- maksimum maliyeti olan ürün fiyatý ne kadar
+select MAX(p.UnitPrice * p.UnitsInStock) from Products p
+
+-- makimum birim fiyata sahip ürün hangisidir
+-- sub query iç içe select sorgusu
+
+select * from Products p1 where p1.UnitPrice >= (select MAX(p.UnitPrice) from Products p)
+
+-- ortalama birim fiyatýn üstündeki ürünler
+select * from Products p1 where p1.UnitPrice > (select AVG(p.UnitPrice) from Products p)
+
+-- iç içe selectlerde ikinci select ve sonrasý () içinde yazýlýr
+
+-- max ürün maliyeti altýnda maliyeti kalan ürünler
+select * from Products p where p.UnitPrice <= 
+(select MAX(p1.UnitPrice) from Products p1) and p.UnitsInStock <= 
+(select MAX(p2.UnitsInStock) from Products p2)
+
+select * from Products p where p.UnitPrice <= 25 and p.UnitsInStock <= 50
