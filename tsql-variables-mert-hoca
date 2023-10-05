@@ -1,0 +1,15 @@
+
+
+-- T-SQL de deðiþken tanýmlama, deðer atama yapma, karar koþul iþlemleri, döngüler ve Komut ile veri giriþ iþlemleri, komut ile tablo yaratma, design etme, tabloyu sistemden kaldýrma gibi iþlemleri yapabiliriz
+
+-- deðiþken kavramý (variables) - farklý tipte deðerleri barýndýran yapýlara deðiþken diyoruz.
+
+-- declare <degisken_ismi> <degisken_tipi> syntax
+declare @name nvarchar(50) -- deðiþken tanýmla (variable declaration)
+
+set @name = 'Ali'  -- variable assigment (deðer atamasý) bütün dillerde deðer atamasý saðdan sola doðru olur. 
+
+declare @surname nvarchar(50)
+set @surname = 'TAN'
+
+select CONCAT(@name, ' ', UPPER(@surname)) -- print yada select deðiþken deðerini okuma yaparýz. (variable value)
