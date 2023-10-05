@@ -1,0 +1,22 @@
+-- views (tablolarýn yansýmasý)
+-- fiziki olarak joinlenmiþ raporlanmýþ sorgularýn tekrar tekrar kullanýlmak için kayýt altýna alýnmasý
+
+
+use MovieDB
+
+-- hangi film hangi salonda gösterime girmiþ
+alter view GosterimdekiFilmler
+as
+select 
+m.Name as 'FilmAdý',
+s.Name as 'SalonAdý',
+m.Duration as 'Süresi',
+s.Capacity as 'Salon Kapasitesi',
+mp.Session as 'Seans',
+mp.RelaseDate as 'Gösterim Tarihi' 
+from MoviePlanings mp 
+join Movies m on m.Id = mp.MovieId
+join Saloons s on s.Id = mp.SaloonId
+where mp.RelaseDate >= GETDATE()
+
+select * from GosterimdekiFilmler
