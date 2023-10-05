@@ -1,0 +1,37 @@
+-- trigger tetikleyeciler (yani bir tabloya kayýt girildiðinde, kayýt güncellendiðinde yada kayýt silindiðinde) kendi kendine otomatik bir iþlem yapýyor. 
+youtube sayfasýna abone oldunuz, sonra bir video yayýnlandý telefona bildirim geldi.
+
+use MovieDB
+
+
+create table FilmÝslemGecmisi
+(
+  id int primary key identity(1,1),
+  filmAdi nvarchar(50) not null,
+  tarih date,
+  islemTipi int
+)
+
+alter trigger FilmLog on Movies -- trigger tablo bazlý girilir
+after insert,update,delete
+as
+begin
+
+declare @filmAdi nvarchar(50)
+set @filmAdi = (select Name from inserted)
+
+if exists(select * from inserted)
+begin
+ insert into FilmÝslemGecmisi(tarih,filmAdi,islemTipi) values(GETDATE(),@filmAdi,1)
+end
+end
+
+-- 1 create, 2 -- update 3-- delete
+select * from FilmÝslemGecmisi
+
+
+-- tabloda bir eylem gerçekleþtiðinde araya giren yapýlar.
+
+insert into Movies(Name,Description) values('ABC34','test34')
+update Movies set Name='DBN' where Name='ABC'
+delete from Movies where Movies.Name ='DBN'
