@@ -1,0 +1,25 @@
+
+-- bir deðiþkenin durumuna göre bir karar verme mekanizmasý var bunun için if yapýsý kullanabiliyoruz
+
+declare @number numeric 
+set @number = 15.5
+
+if(@number >= 15)
+begin
+ print 'Deðer 15'
+end
+
+if(@name = 'Ali2')
+begin
+ print 'Ali isminde bir kiþi var'
+end
+else
+begin
+  print 'name ali deðil'
+end
+
+
+
+-- if sadece tek bir kontrol yapar iþlemi sonlandýrýr.
+
+-- input + process  = output
