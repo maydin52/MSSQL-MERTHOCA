@@ -1,0 +1,13 @@
+-- döngü (sürekli tekrar eden yapýlara)
+
+declare @counter int
+set @counter = 0
+
+while(@counter < 10) -- koþul saðlana kadar tekrarlý iþlem yap
+begin
+ set @counter = @counter + 1
+  print CAST(@counter as nvarchar(50))
+end
+
+
+-- while koþul saðlandýðý sürece iþlem yapar.
