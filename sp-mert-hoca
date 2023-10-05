@@ -1,0 +1,57 @@
+-- store procedure (buda insert,update,delete iþlemlerinizi bazý durumlarda select iþlemleri içinde tercih edilebilir) kullanýlan bir yöntem
+
+-- direkt olarak insert, update,delete kodlarýný program tarafýndan çaðýrak kullanmak bir yazýlým (güvenlik) sql injection açýðýna sebebiyet veriyor
+
+-- store procedure sql injectiona karþý bir yöntemdir.
+
+-- store procedure içinde yazýlan kodlar daha hýzlý performanslý çalýyor.
+
+-- kontrollü kayýt iþlemleri algoritmalarý için kullanýlýr.
+
+
+create procedure FilmKayýt(@filmAdý nvarchar(50), @filmAciklama nvarchar(50))
+as
+insert into Movies(Name,Description) values(@filmAdý,@filmAciklama)
+
+-- artýk insert into yerine aþaðýdaki gibi FilmKayýt procedure çalýþtýrabiliriz.
+exec FilmKayýt 'Yeþil Yol','Yeþil'
+
+select * from Movies
+
+-- Not: Bir kayýt giriþinde, güncellenmesinde kontrolü bir iþlem varsa store procedure kullanýmý çok mantýklýdýr.
+
+-- ürün kayýtlanma iþlemi yapýlýrken minimum stok mikarý 10 adet sisteme girilmelidir. 50 adet stok üzerindeki ürünlerin ise birim fiyatý 100 liranýn üzerinde olmamalýdýr.
+
+use NORTHWND
+select * from Products
+
+alter procedure StokGiris(
+@urunAd nvarchar(50), 
+@stokAdeti int, 
+@birimFiyatý decimal)
+as
+  begin
+
+  if(@stokAdeti >= 10)
+  begin
+	if(@stokAdeti < 50)
+	begin
+	  print '50 stok altýnda ürün fiyatý önemli deðildir'
+	end
+	else if(@stokAdeti > 50 and @birimFiyatý < 100)
+	begin
+	   print 'Stok girilebilir'
+	end
+	else
+	begin
+	 print 'stok 50 adet üstünde birim fiyat 100 üstü ürün girilemez'
+	end
+  end
+  else
+  begin
+	print 'stok 10 adetten az girilemez'
+  end
+ end
+
+
+  exec StokGiris 'A ürünü',10,1000
